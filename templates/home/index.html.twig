@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AirHache - Accueil{% endblock %}
+
+{% block body %}
+
+    
+    <h1 class="m-3 text-center">🪓 Bienvenue sur AirHache 🪓</h1>
+    <h2 class="m-3 text-center">Retrouvez ici la liste de tous les employés !</h1>
+    <div class="container-fluid row justify-content-center">
+
+        {% for user in users %}  
+            <div class="card m-2 p-1" style="width: 18rem;">
+                <img src="{{ user.picture }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>
+                    <p class="card-text">{{user.sector}}</p>
+                    <p class="card-text">{{user.email}}</p>
+                    <a href="{{ path('app_details', {'id': user.id}) }}" class="btn btn-info">Détails</a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

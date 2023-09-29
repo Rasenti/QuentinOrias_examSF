@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AirHache - Détails{% endblock %}
+
+{% block body %}
+
+    
+    <h1 class="m-3 text-center">Thoses Jobs will blow your mind !</br>(and not only)</h1>
+    <div class="container-fluid row justify-content-center">
+ 
+            <div class="card m-2" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>
+                    <p class="card-text">{{user.sector}}</p>
+                    <p class="card-text">{{user.email}}</p>
+                    <a href="{{ path('app_details', {'id': user.id}) }}" class="btn btn-secondary">Détails</a>
+                </div>
+            </div>
+
+    </div>
+{% endblock %}

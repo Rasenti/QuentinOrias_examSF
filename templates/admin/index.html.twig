@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1 class="m-3 text-center">User index</h1>
+
+    <a href="{{ path('app_admin_new') }}" class="btn btn-info">Créer un utilisateur</a>
+    <div class="container-fluid row justify-content-center m-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Sector</th>
+                <th>Contract</th>
+                <th>DateOfEnd</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.roles[0] is same as ('ROLE_ADMIN') %}
+                        Admin
+                    {% else %}
+                        Utilisateur
+                    {% endif %}
+                </td>
+                <td>{{ user.sector }}</td>
+                <td>{{ user.contract }}</td>
+                <td>{{ user.dateOfEnd ? user.dateOfEnd|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_show', {'id': user.id}) }}">Voir</a>
+                    <a href="{{ path('app_admin_edit', {'id': user.id}) }}">Éditer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">Aucun utilisateur trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+
+{% endblock %}
