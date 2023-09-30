@@ -3,48 +3,46 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <div class="container-fluid d-flex  justify-content-center vw-50 p-5">
+ 
+        <div class="d-flex flex-column w-25">
+            <img src="
+                {% if 'https://' in user.picture %}
+                    {{ user.picture }}
+                {% else %}
+                    {{ asset('uploads/'~ user.picture) }}
+                {% endif %}
+            " alt="...">
+            <div class="pt-1">
+                <div class="d-flex justify-content-between pt-1">
+                    <h4 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>
+                    <p class="card-text">
+                        {% if user.roles[0] is same as ('ROLE_ADMIN') %}
+                            Admin
+                        {% else %}
+                            Utilisateur
+                        {% endif %}
+                    </p>
+                </div>
+                <h5 class="card-title pt-1">{{ user.email }}</h5>
+                <div class="d-flex justify-content-between pt-1">
+                    <p class="card-text">{{user.sector}}</p>
+                    <p class="card-text">{{user.contract}}</p>
+                </div>
+                <div class="d-flex justify-content-between pt-1">
+                    <p class="card-text">Fin du contrat :</p>
+                    <p class="card-text">{{user.dateOfEnd | date('d-m-Y')}}</p>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between pt-1">
+                <a href="{{ path('app_admin_index') }}"><button class="btn btn-primary">Retour à la liste</button></a>
+                <a href="{{ path('app_admin_edit', {'id': user.id}) }}"><button class="btn btn-success">Éditer</button></a>
+                {{ include('admin/_delete_form.html.twig') }}
+            </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ user.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ user.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles[0] }}</td>
-            </tr>
-            <tr>
-                <th>Sector</th>
-                <td>{{ user.sector }}</td>
-            </tr>
-            <tr>
-                <th>Contract</th>
-                <td>{{ user.contract }}</td>
-            </tr>
-            <tr>
-                <th>DateOfEnd</th>
-                <td>{{ user.dateOfEnd ? user.dateOfEnd|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        </div>
 
-    <a href="{{ path('app_admin_index') }}">back to list</a>
+    </div>
 
-    <a href="{{ path('app_admin_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('admin/_delete_form.html.twig') }}
 {% endblock %}

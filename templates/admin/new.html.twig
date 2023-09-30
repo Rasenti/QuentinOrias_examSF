@@ -3,9 +3,16 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
 
-    {{ include('admin/_form.html.twig') }}
+    <h1 class="m-3 text-center">Créer un Utilisateur</h1>
 
-    <a href="{{ path('app_admin_index') }}">back to list</a>
+    <div class="container-fluid w-50 mt-5">
+        <div class="d-flex flex-column align-items-stretch">
+
+            {{ include('admin/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
+            <a class="btn btn-primary" href="{{ path('app_admin_index') }}">Retour à la liste</a>
+
+        </div>
+    </div>
+
 {% endblock %}
