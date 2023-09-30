@@ -10,7 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private const NB_EMPLOYEES = 100;
+    private const NB_EMPLOYEES = 50;
     private const CONTRACT_TYPES = ["CDI", "CDD", "Intérim"];
     private const SECTOR = ["RH", "Informatique", "Comptabilité", "Direction"];
     public function load(ObjectManager $manager): void

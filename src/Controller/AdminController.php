@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class AdminController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -38,6 +39,15 @@ class AdminController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile) {
+                // use the FileUploader service to upload the picture
+                $pictureFileName = $fileUploader->upload($pictureFile);
+                // updates the 'pictureFileName' property to store the PDF file name
+                // instead of its contents
+                $user->setPicture($pictureFileName);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -60,12 +70,28 @@ class AdminController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile) {
+                // use the FileUploader service to upload the picture
+                $pictureFileName = $fileUploader->upload($pictureFile);
+                // updates the 'pictureFileName' property to store the PDF file name
+                // instead of its contents
+                $user->setPicture($pictureFileName);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);

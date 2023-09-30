@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length as ConstraintsLength;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -56,7 +57,24 @@ class UserType extends AbstractType
             ])
             ->add('firstname', TextType::class)
             ->add('lastname', TextType::class)
-            // ->add('picture', FileType::class)
+            ->add('picture', FileType::class, [
+                'label' => 'Photos au format jpg, jpeg, png, webp, svg',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/svg',
+                            'image/webp',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez fournir une image au bon format (jpg, jpeg, png, webp, svg)',
+                    ])
+                ],
+            ])
             ->add('sector', ChoiceType::class, ['choices'  => self::SECTORS])
             ->add('contract', ChoiceType::class, ['choices'  => self::CONTRACT_TYPES])
             ->add('dateOfEnd', DateType::class)
